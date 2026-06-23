@@ -1,5 +1,4 @@
-# 智能停车防刷券风控系统 
-# Smart Parking Anti-Fraud System
+# 智能停车防刷券风控系统 (Smart Parking Anti-Fraud System)
 
 [![Language](https://img.shields.io/badge/Language-JavaScript-yellow?style=flat-square)](#)
 [![Frontend](https://img.shields.io/badge/Frontend-React_Native_%2F_Expo_54-61DAFB?style=flat-square)](#)
@@ -126,21 +125,37 @@ sequenceDiagram
 * **重复登录（图三）**：正常用户未注销账号再次登录，系统识别后温和提示黄色“已领取”状态。
 * **防刷拦截（图四）**：恶意用户企图通过注销后重新注册来“套取权益”，系统精准命中历史哈希，界面渲染红色拦截警告。
 
-<div style="display: flex; gap: 10px; flex-wrap: wrap;">
-  <img src="screenshots/app-register.jpg" alt="注册登录界面" width="220"/>
-  <img src="screenshots/app-success.jpg" alt="全新用户发放免单券" width="220"/>
-  <img src="screenshots/app-received.jpg" alt="老用户重复登录提示" width="220"/>
-  <img src="screenshots/app-blocked.jpg" alt="命中注销哈希库被拦截" width="220"/>
-</div>
+<table>
+  <tr>
+    <td align="center">
+      <img src="screenshots/app-register.jpg" alt="注册登录界面" width="250"/><br>
+      <sup><b>(图一)</b> 常规注册</sup>
+    </td>
+    <td align="center">
+      <img src="screenshots/app-success.jpg" alt="全新用户发放免单券" width="250"/><br>
+      <sup><b>(图二)</b> 发券成功</sup>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="screenshots/app-received.jpg" alt="老用户重复登录提示" width="250"/><br>
+      <sup><b>(图三)</b> 重复登录</sup>
+    </td>
+    <td align="center">
+      <img src="screenshots/app-blocked.jpg" alt="命中注销哈希库被拦截" width="250"/><br>
+      <sup><b>(图四)</b> 防刷拦截</sup>
+    </td>
+  </tr>
+</table>
 
 ### 2. 后端监控大盘 (Web Admin Console)
 
 **系统风控全景战情室：**
-呈现当前明文活动用户、脱敏的哈希黑名单以及实时决策追踪日志，并提供“删除”功能。
+呈现当前明文活动用户、脱敏的哈希黑名单以及实时决策追踪日志，并提供“强制删除”功能。
 ![Admin Console Dashboard](screenshots/server-dashboard.png)
 
 **特权人工解封二次确认：**
-提供给后台管理员的“解封”操作入口，支持将误伤的设备哈希从黑名单库永久移除。
+提供给后台管理员的“一键解封”操作入口，支持将误伤的设备哈希从黑名单库永久移除。
 ![Admin Unban Action](screenshots/server-unban.png)
 
 ---
