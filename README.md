@@ -1,5 +1,4 @@
-# 智能停车防刷券风控系统 
-# Smart Parking Anti-Fraud System
+# 智能停车防刷券风控系统 (Smart Parking Anti-Fraud System)
 
 [![Language](https://img.shields.io/badge/Language-JavaScript-yellow?style=flat-square)](#)
 [![Frontend](https://img.shields.io/badge/Frontend-React_Native_%2F_Expo_54-61DAFB?style=flat-square)](#)
@@ -67,7 +66,7 @@ sequenceDiagram
     Server-->>User: 6. 确认彻底注销
     
     Server->>Console: 7. 同步更新至管理员控制台
-    Console->>Server: 8. (可选) 特权操作：手动解封特定哈希
+    Console->>Server: 8. (可选) 特权操作：手动解封/删除特定活动账号
 ```
 
 ### 边界场景与异常处理 (Edge Cases & Exception Handling)
@@ -93,9 +92,9 @@ sequenceDiagram
 
 ### 1. 用户注册与权益校验 (Register & Verification)
 * **Endpoint**: `POST /api/register`
-* **功能作用**: 接收用户信息，进行实时哈希风控校验并决定是否发放免单券。
+* **功能作用**: 接收用户信息，进行实时哈希风控校验并决定是否发放免单券（或提示已领取）。
 * **核心入参**: `{ "phone": "String", "name": "String" }`
-* **成功返回**: `{ "success": true, "data": { "hash": "String", "hasCoupon": Boolean } }`
+* **成功返回**: `{ "success": true, "data": { "hash": "String", "hasCoupon": Boolean, "alreadyReceived": Boolean } }`
 
 ### 2. 合规注销与指纹沉淀 (Account Cancellation)
 * **Endpoint**: `POST /api/cancel`
@@ -103,10 +102,10 @@ sequenceDiagram
 * **核心入参**: `{ "phone": "String", "hash": "String" }`
 * **成功返回**: `{ "success": true }`
 
-### 3. 高危设备特权解封 (Admin Unban)
-* **Endpoint**: `POST /api/admin/remove-blacklist`
-* **功能作用**: 供管理员调用，从黑名单库中永久移除指定的设备哈希，恢复其新客身份。
-* **核心入参**: `{ "hash": "String" }`
+### 3. 高危设备特权解封/强制删除 (Admin Interventions)
+* **Endpoint**: `POST /api/admin/remove-blacklist` & `POST /api/admin/remove-user`
+* **功能作用**: 供管理员调用，支持将误伤的哈希从黑名单移除，或强制将某活动账号从系统内存中物理抹除。
+* **核心入参**: `{ "hash": "String" }` 或 `{ "phone": "String" }`
 * **成功返回**: `{ "success": true }`
 
 ### 4. 监控大盘数据轮询 (Dashboard Data Sync)
@@ -123,18 +122,20 @@ sequenceDiagram
 客户端通过与后端 API 交互，动态呈现完整的免单券发放与风控拦截状态机：
 * **常规注册（图一）**：用户首次输入真实信息进行注册。
 * **发券成功（图二）**：系统核验该设备不在哈希黑名单内，成功下发绿色到账状态。
-* **防刷拦截（图三）**：恶意用户企图通过注销后重新注册来“薅羊毛”，系统精准命中历史哈希，界面渲染红色拦截警告。
+* **重复登录（图三）**：正常用户未注销账号再次登录，系统识别后温和提示黄色“已领取”状态。
+* **防刷拦截（图四）**：恶意用户企图通过注销后重新注册来“套取权益”，系统精准命中历史哈希，界面渲染红色拦截警告。
 
-<div style="display: flex; gap: 10px;">
-  <img src="screenshots/app-register.jpg" alt="注册登录界面" width="250"/>
-  <img src="screenshots/app-success.jpg" alt="全新用户发放免单券" width="250"/>
-  <img src="screenshots/app-blocked.jpg" alt="命中注销哈希库被拦截" width="250"/>
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+  <img src="screenshots/app-register.jpg" alt="注册登录界面" width="220"/>
+  <img src="screenshots/app-success.jpg" alt="全新用户发放免单券" width="220"/>
+  <img src="screenshots/app-received.jpg" alt="老用户重复登录提示" width="220"/>
+  <img src="screenshots/app-blocked.jpg" alt="命中注销哈希库被拦截" width="220"/>
 </div>
 
 ### 2. 后端监控大盘 (Web Admin Console)
 
 **系统风控全景战情室：**
-呈现当前明文活动用户、脱敏的哈希黑名单以及实时决策追踪日志。
+呈现当前明文活动用户、脱敏的哈希黑名单以及实时决策追踪日志，并提供“强制删除”功能。
 ![Admin Console Dashboard](screenshots/server-dashboard.png)
 
 **特权人工解封二次确认：**
