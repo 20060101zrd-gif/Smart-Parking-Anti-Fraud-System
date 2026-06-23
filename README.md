@@ -136,11 +136,11 @@ sequenceDiagram
 ### 2. 后端监控大盘 (Web Admin Console)
 
 **系统风控全景战情室：**
-呈现当前明文活动用户、脱敏的哈希黑名单以及实时决策追踪日志，并提供“强制删除”功能。
+呈现当前明文活动用户、脱敏的哈希黑名单以及实时决策追踪日志，并提供“删除”功能。
 ![Admin Console Dashboard](screenshots/server-dashboard.png)
 
 **特权人工解封二次确认：**
-提供给后台管理员的“一键解封”操作入口，支持将误伤的设备哈希从黑名单库永久移除。
+提供给后台管理员的“解封”操作入口，支持将误伤的设备哈希从黑名单库永久移除。
 ![Admin Unban Action](screenshots/server-unban.png)
 
 ---
