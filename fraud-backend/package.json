@@ -1,0 +1,10 @@
+{
+  "name": "fraud-backend",
+  "version": "1.0.0",
+  "description": "风控服务器",
+  "main": "server.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}
